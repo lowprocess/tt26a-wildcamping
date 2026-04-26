@@ -9,7 +9,24 @@ You can also include images in this folder and reference them in the markdown. E
 
 ## How it works
 
-Explain how your project works
+Several basic test structures exist on chip for validation:
+
+- Inverter
+
+The primary structures for the chip
+
+- Two Tunable Differential Ring Oscillators (~1GHz)
+- 2 8-bit DACs for bias control
+- Gilbert Cell Mixer
+- 3/4 Modulus Prescaler
+- Accumulator with mux'd output bit
+- 12-bit counter with compare register
+- Serial interface for control
+    - Write Only
+    - 2 address bits
+        - 0 = RO VBIAS 0 / RO VBIAS 1
+        - 2 = Accumulator 
+        - 3 = Counter Compare
 
 ## How to test
 
