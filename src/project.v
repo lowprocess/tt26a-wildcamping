@@ -27,7 +27,8 @@ module tt_um_lowprocess_wildcamping (
 
   assign presc = ui_in[0];
   assign uo_out[0] = clk_out;
-  assign uo_out[7:1] = 0;
+  assign uo_out[6:1] = 0;
+  assign uo_out[7] = ~ui_in[7]; // Test Inverter
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena};
