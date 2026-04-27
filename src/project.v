@@ -25,7 +25,7 @@ module tt_um_lowprocess_wildcamping (
 
   presc34 p0 ( clk, presc, !rst_n, clk_out );
 
-  assign ui_in[0] = presc;
+  assign presc = ui_in[0];
   assign uo_out[0] = clk_out;
   assign uo_out[7:1] = 0;
 
