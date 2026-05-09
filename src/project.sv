@@ -18,7 +18,7 @@ module tt_um_lowprocess_wildcamping (
 
   // All output pins must be assigned. If not used, assign to 0.
 
-  assign uio_oe  = 255;
+  assign uio_oe  = ui_in[2] ? 0 : 255;
 
   wire presc;
   wire clk_out;
@@ -41,17 +41,7 @@ module tt_um_lowprocess_wildcamping (
   wire [3:0] rom_addr;
   wire [23:0] rom_data;
   rom r0 ( clk, rom_addr, rom_data );
-  core c0 ( clk, ena, rom_addr, rom_data, uio_in, pico_int, uio_out, pico_halt, pico_wfi);
-
-//    (input logic clk_i, 
-//     input logic n_rst_i,
-//  output logic [A-1:0] prog_addr,
-	  //input logic [W_INST-1:0] prog_data,
-    // input logic [N-1:0] ext_data_i,
-    // input logic ext_int_i,
-    // output logic signed [N-1:0] result_o,
-    // output logic halt_o, wfi_o);
-
+  core c0 ( clk, rst_n, rom_addr, rom_data, uio_in, pico_int, uio_out, pico_halt, pico_wfi);
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena};

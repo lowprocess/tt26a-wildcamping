@@ -1,9 +1,0 @@
-common.v
-core.v
-edge_detect.v
-ovf.v
-alu.v
-dec.v
-pc.v
-rf.v
-rom.v

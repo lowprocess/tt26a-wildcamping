@@ -1,18 +1,18 @@
-module alu import pico::*; 
-    (input logic signed [N-1:0] a_i,
-     input logic signed  [N-1:0] b_i,
-     input funcALU op,
-     output logic signed [N-1:0] r_o,
-     output flagsALU flags_o);
+module alu
+    (input logic signed [pico::N-1:0] a_i,
+     input logic signed  [pico::N-1:0] b_i,
+     input pico::funcALU op,
+     output logic signed [pico::N-1:0] r_o,
+     output pico::flagsALU flags_o);
 
     logic signed sub;
-    logic signed [N+1:0] tmp;
-    logic signed [N:0] r_as;
+    logic signed [pico::N+1:0] tmp;
+    logic signed [pico::N:0] r_as;
     always_comb begin
-        sub = (op == F_SUB);
+        sub = (op == pico::F_SUB);
         // Altera Cookbook Example 'XOR in front of Carry Chain'
-        tmp = {1'b0, a_i, sub} + {sub, {N{sub}} ^ b_i, sub};
-        r_as = tmp[N+1:1];
+        tmp = {1'b0, a_i, sub} + {sub, {pico::N{sub}} ^ b_i, sub};
+        r_as = tmp[pico::N+1:1];
     end
 
     // Partition overflow and carry logic
@@ -20,19 +20,19 @@ module alu import pico::*;
 
     always_comb begin
         flags_o.Zero = ~|r_as;
-        flags_o.Negative = r_as[N-1];
+        flags_o.Negative = r_as[pico::N-1];
     end
 
     always_comb begin
         unique case(op)
-            F_ADD, 
-            F_SUB: r_o = r_as[N-1:0];
-            F_MUL: r_o = a_i * b_i;
-            F_AND: r_o = a_i & b_i;
-            F_OR:  r_o = a_i | b_i;
-            F_XOR: r_o = a_i ^ b_i;
-            F_NOT: r_o = ~ a_i;
-            F_A:   r_o = a_i;
+            pico::F_ADD, 
+            pico::F_SUB: r_o = r_as[pico::N-1:0];
+            pico::F_MUL: r_o = a_i * b_i;
+            pico::F_AND: r_o = a_i & b_i;
+            pico::F_OR:  r_o = a_i | b_i;
+            pico::F_XOR: r_o = a_i ^ b_i;
+            pico::F_NOT: r_o = ~ a_i;
+            pico::F_A:   r_o = a_i;
             default: r_o = 'd0;
         endcase
     end

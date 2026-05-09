@@ -1,15 +1,15 @@
-module rf import pico::*; 
+module rf
     (input logic clk_i, 
      input logic wr_en_i,
-     input logic signed [N-1:0] ext_data_i,
-	  output logic signed [N-1:0] ext_data_o,
-     input logic signed [N-1:0] wd_data_i,
-     input logic [$clog2(R)-1:0] rs_addr_i,
-     input logic [$clog2(R)-1:0] rd_addr_i,
-     output logic signed [N-1:0] rs_data_o, 
-     output logic signed [N-1:0] rd_data_o);
+     input logic signed [pico::N-1:0] ext_data_i,
+	  output logic signed [pico::N-1:0] ext_data_o,
+     input logic signed [pico::N-1:0] wd_data_i,
+     input logic [$clog2(pico::R)-1:0] rs_addr_i,
+     input logic [$clog2(pico::R)-1:0] rd_addr_i,
+     output logic signed [pico::N-1:0] rs_data_o, 
+     output logic signed [pico::N-1:0] rd_data_o);
     
-    logic signed [N-1:0] regs [0:R-1];
+    logic signed [pico::N-1:0] regs [0:pico::R-1];
 
     always_ff @(posedge clk_i) begin : REGISTER
         if(wr_en_i) begin

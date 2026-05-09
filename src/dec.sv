@@ -1,10 +1,10 @@
-module dec import pico::*; 
-    (output modePC mode_pc_o,
-     input opCode op_code_i,
+module dec
+    (output pico::modePC mode_pc_o,
+     input pico::opCode op_code_i,
      output logic wr_en_rf_o,
      output logic a_imm_alu_o,
-     output funcALU func_alu_o,
-     input flagsALU flags_alu_i,
+     output pico::funcALU func_alu_o,
+     input pico::flagsALU flags_alu_i,
      output logic halt_core_o,
      output logic wfi_core_o,
      input logic ext_int_i );
@@ -13,42 +13,42 @@ module dec import pico::*;
         // In the event that we encounter an unknown instruction, 
         // This will cause return to address 0 or return to subroutine call
         // Core may also halt in this case if configured which will gate PC clock.
-        mode_pc_o = RETURN;
+        mode_pc_o = pico::RETURN;
         wr_en_rf_o = 1'b0;
         a_imm_alu_o = 1'b0;
-        func_alu_o = funcALU'(op_code_i[3] ? F_SUB : op_code_i[2:0]);
+        func_alu_o = pico::funcALU'(op_code_i[3] ? pico::F_SUB : op_code_i[2:0]);
         halt_core_o = 1'b0;
         a_imm_alu_o = op_code_i[4]; // Check for Immediate bit
 		  wfi_core_o = 1'b0;
 		  
         unique case (op_code_i)
-            O_ADD, O_ADDI, 
-            O_SUB, O_SUBI, 
-            O_MUL, O_MULI, 
-            O_AND, O_ANDI, 
-            O_OR,  O_ORI, 
-            O_XOR, O_XORI, 
-            O_NOT, O_NOTI: begin
-                mode_pc_o = INCREMENT;
+            pico::O_ADD, pico::O_ADDI, 
+            pico::O_SUB, pico::O_SUBI, 
+            pico::O_MUL, pico::O_MULI, 
+            pico::O_AND, pico::O_ANDI, 
+            pico::O_OR,  pico::O_ORI, 
+            pico::O_XOR, pico::O_XORI, 
+            pico::O_NOT, pico::O_NOTI: begin
+                mode_pc_o = pico::INCREMENT;
                 wr_en_rf_o = 1'b1;
             end
-            O_BEQ: begin
-                mode_pc_o = flags_alu_i.Zero ? RELATIVE : INCREMENT;
+            pico::O_BEQ: begin
+                mode_pc_o = flags_alu_i.Zero ? pico::RELATIVE : pico::INCREMENT;
             end
-            O_BNE: begin
-                mode_pc_o = ~flags_alu_i.Zero ? RELATIVE : INCREMENT;
+            pico::O_BNE: begin
+                mode_pc_o = ~flags_alu_i.Zero ? pico::RELATIVE : pico::INCREMENT;
             end
-            O_HALT: begin
+            pico::O_HALT: begin
                 halt_core_o = 1'b1;
             end
-            O_JSBR: begin
-                mode_pc_o = SUBROUTINE;
+            pico::O_JSBR: begin
+                mode_pc_o = pico::SUBROUTINE;
             end
-            O_RSBR: begin
-                mode_pc_o = RETURN;
+            pico::O_RSBR: begin
+                mode_pc_o = pico::RETURN;
             end
-            O_WFIV: begin
-                mode_pc_o = INCREMENT;
+            pico::O_WFIV: begin
+                mode_pc_o = pico::INCREMENT;
                 wfi_core_o = ~ext_int_i;
             end
             default: begin
