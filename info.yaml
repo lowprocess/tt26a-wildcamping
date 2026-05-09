@@ -19,6 +19,15 @@ project:
   source_files:
     - "project.v"
     - "presc34.v"
+    - "common.sv"
+    - "core.sv"
+    - "alu.sv"
+    - "dec.sv"
+    - "edge_detect.sv"
+    - "ovf.sv"
+    - "pc.sv"
+    - "rf.sv"
+    - "rom.sv"
 
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
