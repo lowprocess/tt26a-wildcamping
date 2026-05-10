@@ -22,27 +22,30 @@ module tt_um_lowprocess_wildcamping (
 
   wire presc;
   wire clk_out;
-
-  presc34 p0 ( clk, presc, !rst_n, clk_out );
-
-  assign presc = ui_in[0];
-  assign uo_out[0] = clk_out;
-  assign uo_out[6:3] = 0;
-  assign uo_out[7] = ~ui_in[7]; // Test Inverter
-
   wire pico_int;
   wire pico_halt;
   wire pico_wfi;
 
+  presc34 p0 ( clk, presc, !rst_n, clk_out );
+
+  assign presc = ui_in[0];
   assign pico_int = ui_in[1];
+
+  assign uo_out[0] = clk_out;
   assign uo_out[1] = pico_halt;
   assign uo_out[2] = pico_wfi;
+  assign uo_out[3] = 0;
+  assign uo_out[4] = 0;
+  assign uo_out[5] = 0;
+  assign uo_out[6] = 0;
+  assign uo_out[7] = ~ui_in[7]; // Test Inverter
 
-  wire [3:0] rom_addr;
-  wire [23:0] rom_data;
-  rom r0 ( clk, rom_addr, rom_data );
-  core c0 ( clk, rst_n, rom_addr, rom_data, uio_in, pico_int, uio_out, pico_halt, pico_wfi);
+  wire [3:0] addr;
+  wire [23:0] inst;
+
+  rom r0 (addr, inst);
+  core c0 (clk, rst_n, addr, inst, uio_in, pico_int, uio_out, pico_halt, pico_wfi);
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena};
+  wire _unused = &{ena, ui_in[6:3], uio_in};
 endmodule

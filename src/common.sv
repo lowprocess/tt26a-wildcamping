@@ -3,7 +3,7 @@
 
 package pico;
 
-parameter A = 4; // Memory Address Width
+parameter A = 4;  // Memory Address Width
 parameter N = 8;  // Data Bus Width
 parameter R = 32; // Register File Size
 
@@ -72,8 +72,15 @@ typedef struct packed {
 
 endpackage
 
-// Use https://hlorenzi.github.io/customasm/web/ as an assembler
-/*#bits 24
+/*#bankdef pico
+{
+	bits = 24
+	addr = 0x0000
+    size = 16
+    outp = 0
+}
+
+#bank pico
 
 #subruledef op
 {
@@ -101,11 +108,12 @@ endpackage
 
 #subruledef ops
 {
-	wfiv => 0x20
+	
 }
 
 #ruledef
 {
+	wfi => 0xfc0000
     nop => 0x040000
 	halt => 0x000000
 	{o:ops} r{rd_num} => o`6 @ rd_num`5 @ 0b0000000000000 
@@ -115,7 +123,22 @@ endpackage
 	rsbr => 0xc40000
 }
 
-addi r1, r4, 0
-mul r2, r1
-addi r8, r2, 0
-addi r2, r1, 0*/
+jsbr start
+load_ext: wfi
+	addi r4, r30, 0
+	wfi
+	rsbr
+start:    addi r8, r0, 0
+	jsbr load_ext
+	addi r6, r4, 0
+	jsbr load_ext
+ 	addi r5, r4, 0
+	mul r6, r5
+	add r8, r6
+	jsbr start
+
+*/
+//addi r1, r4, 0
+//mul r2, r1
+//addi r8, r2, 0
+//addi r2, r1, 0
