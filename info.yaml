@@ -1,6 +1,6 @@
 # Tiny Tapeout project information
 project:
-  title:        "Wildcamping"      # Project title
+  title:        "PicoMIPS CPU"      # Project title
   author:       "Byron Theobald"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
   description:  "Initial Tests and Basic MIPS CPU" # One line description of what your project does
