@@ -3,7 +3,7 @@
 
 package pico;
 
-parameter A = 4;  // Memory Address Width
+parameter A = 5;  // Memory Address Width
 parameter N = 8;  // Data Bus Width
 parameter R = 32; // Register File Size
 

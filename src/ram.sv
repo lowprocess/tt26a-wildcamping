@@ -5,7 +5,7 @@ module ram #(parameter A = 4, parameter W = 24)
      output logic [W-1:0] data_o,
      input logic write );
      
-    reg [W-1:0] memory [0:(1<<A)-1];
+    reg [W-1:0] memory [2];
 
     always_ff @(posedge clk) begin
         if( write )
