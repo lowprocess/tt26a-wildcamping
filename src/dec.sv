@@ -9,6 +9,15 @@ module dec
      output logic wfi_core_o,
      input logic ext_int_i );
 
+    logic op_sub, op_imm;
+    logic [2:0] op_code;
+    assign op_imm = op_code_i[4];
+    assign op_sub = op_code_i[3];
+    assign op_code = op_code_i[2:0];
+
+    logic flag_zero;
+    assign flag_zero = flags_alu_i.Zero;
+
     always_comb begin
         // In the event that we encounter an unknown instruction, 
         // This will cause return to address 0 or return to subroutine call
@@ -16,9 +25,11 @@ module dec
         mode_pc_o = pico::RETURN;
         wr_en_rf_o = 1'b0;
         a_imm_alu_o = 1'b0;
-        func_alu_o = pico::funcALU'(op_code_i[3] ? pico::F_SUB : op_code_i[2:0]);
+
+        func_alu_o = pico::funcALU'(op_sub ? pico::F_SUB : op_code);
+
         halt_core_o = 1'b0;
-        a_imm_alu_o = op_code_i[4]; // Check for Immediate bit
+        a_imm_alu_o = op_imm; // Check for Immediate bit
 		  wfi_core_o = 1'b0;
 		  
         unique case (op_code_i)
@@ -33,10 +44,10 @@ module dec
                 wr_en_rf_o = 1'b1;
             end
             pico::O_BEQ: begin
-                mode_pc_o = flags_alu_i.Zero ? pico::RELATIVE : pico::INCREMENT;
+                mode_pc_o = pico::modePC'(flag_zero ? pico::RELATIVE : pico::INCREMENT);
             end
             pico::O_BNE: begin
-                mode_pc_o = ~flags_alu_i.Zero ? pico::RELATIVE : pico::INCREMENT;
+                mode_pc_o = pico::modePC'(~flag_zero ? pico::RELATIVE : pico::INCREMENT);
             end
             pico::O_HALT: begin
                 halt_core_o = 1'b1;

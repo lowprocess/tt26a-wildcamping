@@ -21,9 +21,10 @@ module tt_um_lowprocess_wildcamping (
   wire presc_inv;
   wire pico_int;
   wire pico_halt;
-  wire pico_next;
   wire pico_wfi;
   wire pico_uio;
+  wire sr_test;
+  wire [7:0] pico_ro;
   wire sdi;
   wire scs;
   wire sck;
@@ -36,8 +37,8 @@ module tt_um_lowprocess_wildcamping (
   assign sdi = ui_in[3];
   assign scs = ui_in[4];
   assign pico_int = ui_in[5];
-  assign pico_next = ui_in[6]; 
-  assign pico_uio = ui_in[7];
+  assign pico_uio = ui_in[6];
+  assign sr_test = ui_in[7];
 
   assign uio_oe  = pico_uio ? 0 : 255;
   
@@ -53,8 +54,20 @@ module tt_um_lowprocess_wildcamping (
   assign uo_out[6] = pico_addr[3];
   assign uo_out[7] = pico_addr[4];
 
-  core c0 (clk, rst_n, pico_addr, pico_inst, uio_in, pico_int, pico_next, uio_out, pico_halt, pico_wfi);
-  shiftreg sr (sck, sdi, scs, pico_inst);
+  assign uio_out = sr_test ? pico_inst[7:0] : pico_ro;
+
+  wire sr_clockgen;
+  wire pico_step_sync;
+
+  shiftreg s0 (sck, sdi, scs, pico_inst, sr_clockgen);
+
+  edge_detect e1(
+    .clk_i  	(clk ),
+    .sig_i  	(sr_clockgen ),
+    .edge_o 	(pico_step_sync )
+  );  
+  
+  core c0 (pico_step_sync, rst_n, pico_addr, pico_inst, uio_in, pico_int, pico_ro, pico_halt, pico_wfi);
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ena};

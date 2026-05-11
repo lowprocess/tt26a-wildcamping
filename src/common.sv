@@ -72,73 +72,87 @@ typedef struct packed {
 
 endpackage
 
-/*#bankdef pico
-{
-	bits = 24
-	addr = 0x0000
-    size = 16
-    outp = 0
-}
+//https://hlorenzi.github.io/customasm/web/
 
-#bank pico
+// #bankdef pico
+// {
+// 	bits = 24
+// 	addr = 0x0000
+//     size = 16
+//     outp = 0
+// }
 
-#subruledef op
-{
-	add => 0b000001
-	sub => 0b000010
-	mul => 0b000011
-	and => 0b000100
-	or  => 0b000101
-	xor => 0b000110
-	not => 0b000111
-}
+// #bank pico
 
-#subruledef opi
-{
-	addi => 0b010001
-	subi => 0b010010
-	muli => 0b010011
-	andi => 0b010100
-	ori  => 0b010101
-	xori => 0b010110
-	noti => 0b010111
-	beq => 0b001000
-	bne => 0b001001
-}
+// #subruledef op
+// {
+// 	add => 0b000001
+// 	sub => 0b000010
+// 	mul => 0b000011
+// 	and => 0b000100
+// 	or  => 0b000101
+// 	xor => 0b000110
+// 	not => 0b000111
+// }
 
-#subruledef ops
-{
-	
-}
+// #subruledef opi
+// {
+// 	addi => 0b010001
+// 	subi => 0b010010
+// 	muli => 0b010011
+// 	andi => 0b010100
+// 	ori  => 0b010101
+// 	xori => 0b010110
+// 	noti => 0b010111
+// 	beq => 0b001000
+// 	bne => 0b001001
+// }
 
-#ruledef
-{
-	wfi => 0xfc0000
-    nop => 0x040000
-	halt => 0x000000
-	{o:ops} r{rd_num} => o`6 @ rd_num`5 @ 0b0000000000000 
-	{o:op} r{rd_num}, r{rs_num} => o`6 @ rd_num`5 @ rs_num`5 @ 0x00
-	{o:opi} r{rd_num}, r{rs_num}, {imm: s8} => o`6 @ rd_num`5 @ rs_num`5 @ imm`8
-	jsbr {imm: u8} => 0xc000 @ imm`8
-	rsbr => 0xc40000
-}
+// #subruledef ops
+// {
+// 	wfi => 0x20	
+// }
 
-jsbr start
-load_ext: wfi
-	addi r4, r30, 0
-	wfi
-	rsbr
-start:    addi r8, r0, 0
-	jsbr load_ext
-	addi r6, r4, 0
-	jsbr load_ext
- 	addi r5, r4, 0
-	mul r6, r5
-	add r8, r6
-	jsbr start
+// #ruledef
+// {
+//     nop => 0x040000
+// 	halt => 0x000000
+// 	{o:ops} r{rd_num} => o`6 @ rd_num`5 @ 0b0000000000000 
+// 	{o:op} r{rd_num}, r{rs_num} => o`6 @ rd_num`5 @ rs_num`5 @ 0x00
+// 	{o:opi} r{rd_num}, r{rs_num}, {imm: s8} => o`6 @ rd_num`5 @ rs_num`5 @ imm`8
+// 	jsbr {imm: u8} => 0xc000 @ imm`8
+// 	rsbr => 0xc40000
+// }
 
-*/
-//addi r1, r4, 0
-//mul r2, r1
-//addi r8, r2, 0
-//addi r2, r1, 0
+// jsbr start
+// load_ext: wfi r7
+// 	addi r4, r1, 0
+// 	wfi r7
+// 	rsbr
+// start:    addi r7, r0, 0
+// 	jsbr load_ext
+// 	addi r6, r4, 0
+// 	jsbr load_ext
+//  	addi r5, r4, 0
+// 	mul r6, r5
+// 	add r7, r6
+// 	jsbr start
+
+
+//  outp | addr | data (base 16)
+
+//   0:0 |    0 | c0 00 05 ; jsbr start
+//   3:0 |    1 |          ; load_ext:
+//   3:0 |    1 | 80 e0 00 ; wfi r7
+//   6:0 |    2 | 44 81 00 ; addi r4, r1, 0
+//   9:0 |    3 | 80 e0 00 ; wfi r7
+//   c:0 |    4 | c4 00 00 ; rsbr
+//   f:0 |    5 |          ; start:
+//   f:0 |    5 | 44 e0 00 ; addi r7, r0, 0
+//  12:0 |    6 | c0 00 01 ; jsbr load_ext
+//  15:0 |    7 | 44 c4 00 ; addi r6, r4, 0
+//  18:0 |    8 | c0 00 01 ; jsbr load_ext
+//  1b:0 |    9 | 44 a4 00 ; addi r5, r4, 0
+//  1e:0 |    a | 0c c5 00 ; mul r6, r5
+//  21:0 |    b | 04 e6 00 ; add r7, r6
+//  24:0 |    c | c0 00 05 ; jsbr start

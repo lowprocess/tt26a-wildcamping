@@ -6,7 +6,7 @@ module edge_detect
     logic [2:0] stages;
 
     // Synchronously detect rising or falling edge 
-    assign edge_o = (stages[2] & ~stages[1]) | (~stages[2] & stages[1]);
+    assign edge_o = (~stages[2] & stages[1] & stages[0]);
 
     always_ff @(posedge clk_i) begin
         stages[0] <= sig_i;
