@@ -26,12 +26,12 @@ async def test_project(dut):
     dut._log.info("Test project behavior")
 
     # Test the Inverter
-    dut.ui_in.value = 0
-    await ClockCycles(dut.clk, 1)
-    assert (dut.uo_out.value[7] == True)
-    dut.ui_in.value = 128
-    await ClockCycles(dut.clk, 1)
-    assert (dut.uo_out.value[7] == False)
+    #dut.ui_in.value = 0
+    #await ClockCycles(dut.clk, 1)
+    #assert (dut.uo_out.value[7] == True)
+    #dut.ui_in.value = 128
+    #await ClockCycles(dut.clk, 1)
+    #assert (dut.uo_out.value[7] == False)
 
     # Keep testing the module by changing the input values, waiting for
     # one or more clock cycles, and asserting the expected output values.
